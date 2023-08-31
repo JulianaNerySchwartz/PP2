@@ -7,8 +7,13 @@
 <body>
   <script src="three.js"></script>
   
-  <button id="camera-switch">Alternar Câmera</button>
-  
+  <div id="scene-container">
+    <div id="controls">
+      <button id="camera-switch">Alternar Câmera</button>
+      <button id="rotate-x">Rotacionar Eixo X</button>
+      <button id="rotate-y">Rotacionar Eixo Y</button>
+    </div>
+  </div>
   <script type="module">
     const scene = new THREE.Scene();
 
@@ -28,12 +33,16 @@
     scene.add(cube);
 
     let activeCamera = cameraPerspective;
+    let rotationAxis = 'Y';
 
     function animate() {
       requestAnimationFrame(animate);
 
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
+      if (rotationAxis === 'X') {
+        cube.rotation.x += 0.01;
+      } else if (rotationAxis === 'Y') {
+        cube.rotation.y += 0.01;
+      }
 
       renderer.render(scene, activeCamera);
     }
@@ -41,6 +50,14 @@
 
     document.getElementById('camera-switch').addEventListener('click', () => {
       activeCamera = (activeCamera === cameraPerspective) ? cameraOrthographic : cameraPerspective;
+    });
+
+    document.getElementById('rotate-x').addEventListener('click', () => {
+      rotationAxis = 'X';
+    });
+
+    document.getElementById('rotate-y').addEventListener('click', () => {
+      rotationAxis = 'Y';
     });
 
   </script>
