@@ -7,11 +7,16 @@
 <body>
   <script src="three.js"></script>
   
+  <button id="camera-switch">Alternar Câmera</button>
+  
   <script type="module">
     const scene = new THREE.Scene();
 
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.z = 5;
+    const cameraPerspective = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+    cameraPerspective.position.z = 5;
+
+    const cameraOrthographic = new THREE.OrthographicCamera(-2, 2, 2, -2, 1, 10);
+    cameraOrthographic.position.set(0, 0, 5);
 
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -22,7 +27,21 @@
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
-    renderer.render(scene, camera);
+    let activeCamera = cameraPerspective;
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      cube.rotation.x += 0.01;
+      cube.rotation.y += 0.01;
+
+      renderer.render(scene, activeCamera);
+    }
+    animate();
+
+    document.getElementById('camera-switch').addEventListener('click', () => {
+      activeCamera = (activeCamera === cameraPerspective) ? cameraOrthographic : cameraPerspective;
+    });
 
   </script>
 </body>
